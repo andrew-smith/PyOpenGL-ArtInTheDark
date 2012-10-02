@@ -8,6 +8,9 @@ import string
 __version__ = string.split('$Revision: 1.1.1.1 $')[1]
 __date__ = string.join(string.split('$Date: 2007/02/15 19:25:21 $')[1:3], ' ')
 __author__ = 'Tarn Weisner Burton <twburton@users.sourceforge.net>'
+
+from MovingBlob import *
+
  
 #
 # Ported to PyOpenGL 2.0 by Tarn Weisner Burton 10May2001
@@ -48,6 +51,9 @@ ESCAPE = '\033'
  
 # Number of the glut window.
 window = 0
+
+
+testBlob = MovingBlob(0.0, 0.0)
  
 # A general OpenGL initialization function.  Sets all of the initial parameters. 
 def InitGL(Width, Height):                # We call this right after our OpenGL window is created.
@@ -77,14 +83,27 @@ def ReSizeGLScene(Width, Height):
  
 # The main drawing function. 
 def DrawGLScene():
-    global tempVar
+    global testBlob
     
     # Clear The Screen And The Depth Buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()                    # Reset The View 
+    
+    # move drawing curser back
+    glTranslatef(0.0, 0.0, -6.0)
+    
+    testBlob.update()
+    testBlob.draw()
+    
+    # testBlob.Draw()
+    
  
+    """
     # Move Left 1.5 units and into the screen 6.0 units.
     glTranslatef(-1.5, 0.0, -6.0)
+    
+ 
+    
  
     # Since we have smooth color mode on, this will be great for the Phish Heads :-).
     # Draw a triangle
@@ -109,6 +128,8 @@ def DrawGLScene():
     glVertex3f(1.0, -1.0, 0.0)          # Bottom Right
     glVertex3f(-1.0, -1.0, 0.0)         # Bottom Left
     glEnd()                             # We are done with the polygon
+ 
+    """
  
     #  since this is double buffered, swap the buffers to display what just got drawn. 
     glutSwapBuffers()
