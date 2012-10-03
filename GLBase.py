@@ -44,6 +44,7 @@ from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 import sys
+import random
  
 # Some api in the chain is translating the keystrokes to this octal string
 # so instead of saying: ESCAPE = 27, we use the following.
@@ -53,7 +54,12 @@ ESCAPE = '\033'
 window = 0
 
 
-testBlob = MovingBlob(0.0, 0.0)
+# array of blobs to test with
+testBlobs = []
+for i in range(1, 10):
+    testBlobs.append(MovingBlob(random.random() *6 -3, random.random() *6 -3))
+
+
  
 # A general OpenGL initialization function.  Sets all of the initial parameters. 
 def InitGL(Width, Height):                # We call this right after our OpenGL window is created.
@@ -83,7 +89,7 @@ def ReSizeGLScene(Width, Height):
  
 # The main drawing function. 
 def DrawGLScene():
-    global testBlob
+    global testBlobs
     
     # Clear The Screen And The Depth Buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -92,14 +98,13 @@ def DrawGLScene():
     # move drawing curser back
     glTranslatef(0.0, 0.0, -6.0)
     
-    glPushMatrix()
     
-    testBlob.update(0.2, 0.2)
-    testBlob.draw()
     
-    glPopMatrix()
-    
-    # testBlob.Draw()
+    for blob in testBlobs:
+        glPushMatrix()
+        blob.update()
+        blob.draw()
+        glPopMatrix()
     
  
     """
@@ -145,7 +150,7 @@ def keyPressed(*args):
         sys.exit()
  
 def main():
-    global window
+    global window, testBlobs
     # For now we just pass glutInit one empty argument. I wasn't sure what should or could be passed in (tuple, list, ...)
     # Once I find out the right stuff based on reading the PyOpenGL source, I'll address this.
     glutInit(sys.argv)
@@ -172,6 +177,10 @@ def main():
     # set the function pointer and invoke a function to actually register the callback, otherwise it
     # would be very much like the C version of the code.    
     glutDisplayFunc(DrawGLScene)
+    
+    # create random movements
+    for blob in testBlobs:
+        blob.setRandomGoTo()
  
     # Uncomment this line to get full screen.
     #glutFullScreen()
