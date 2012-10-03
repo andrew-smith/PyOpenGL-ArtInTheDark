@@ -91,7 +91,7 @@ class MovingBlob:
         glColor3f(1.0, 0.0, 0.0) # Red
         
         # draw center circle
-        glDrawCircle(0.1)
+        glDrawTransparentCircle(0.1, 1.0, 0.0, 0.0)
         
         # draw 3 circles circling it
         glRotatef(self.rotation, 0, 0, 1)
@@ -103,7 +103,8 @@ class MovingBlob:
             glPushMatrix()
             glRotatef(rotation, 0, 0, 1)
             glTranslatef(0.0, 0.2, 0.0)
-            glDrawCircle(0.05)
+            glColor3f(0.0, 1.0, 0.0) # Green
+            glDrawTransparentCircle(0.05, 0.0, 1.0, 0.0)
             glPopMatrix()
         
         glPopMatrix()
