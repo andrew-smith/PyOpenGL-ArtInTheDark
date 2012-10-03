@@ -54,7 +54,7 @@ class BlobManager:
         if len(self.blobs) > 1:
             for blob in self.blobs:
                 closeBlob = None # the closest blob to "blob"
-                smallestDistance = 100000
+                smallestDistance = sys.maxint
                 for blob2 in self.blobs:
                     if blob != blob2:
                         blob2Dist = math.hypot(blob2.getX() - blob.getX(), blob2.getY() - blob.getY())
