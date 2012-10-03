@@ -92,6 +92,11 @@ def DrawGLScene():
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()                    # Reset The View 
     
+    # allow for transparency
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+    glEnable( GL_BLEND )
+    glClearColor(0.0,0.0,0.0,0.0)
+    
     # move drawing curser back
     glTranslatef(0.0, 0.0, -6.0)
     
