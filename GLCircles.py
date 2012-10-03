@@ -52,7 +52,7 @@ def glDrawTransparentCircle(radius, colourR, colourG, colourB):
     
     glEnd()
 
-def glDrawInvertedTransparentCircle(radius, colourR, colourG, colourB):
+def glDrawInvertedTransparentCircle(radius, colourR, colourG, colourB, alpha):
     """
     No colour should have been set before this function
     """
@@ -66,7 +66,7 @@ def glDrawInvertedTransparentCircle(radius, colourR, colourG, colourB):
     
     
     #set outside non-transparent colour
-    glColor4f(colourR, colourG, colourB, 1.0)
+    glColor4f(colourR, colourG, colourB, alpha)
     angle = 0
     while True:
         rads = math.radians(angle)
