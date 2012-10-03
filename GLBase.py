@@ -107,39 +107,6 @@ def DrawGLScene():
         glPopMatrix()
     
  
-    """
-    # Move Left 1.5 units and into the screen 6.0 units.
-    glTranslatef(-1.5, 0.0, -6.0)
-    
- 
-    
- 
-    # Since we have smooth color mode on, this will be great for the Phish Heads :-).
-    # Draw a triangle
-    glBegin(GL_POLYGON)                 # Start drawing a polygon
-    glColor3f(1.0, 0.0, 0.0)            # Red
-    glVertex3f(0.0, 1.0, 0.0)           # Top
-    glColor3f(0.0, 1.0, 0.0)            # Green
-    glVertex3f(1.0, -1.0, 0.0)          # Bottom Right
-    glColor3f(0.0, 0.0, 1.0)            # Blue
-    glVertex3f(-1.0, -1.0, 0.0)         # Bottom Left
-    glEnd()                             # We are done with the polygon
- 
- 
-    # Move Right 3.0 units.
-    glTranslatef(3.0, 0.0, 0.0)
- 
-    # Draw a square (quadrilateral)
-    glColor3f(0.3, 0.5, 1.0)            # Bluish shade
-    glBegin(GL_QUADS)                   # Start drawing a 4 sided polygon
-    glVertex3f(-1.0, 1.0, 0.0)          # Top Left
-    glVertex3f(1.0, 1.0, 0.0)           # Top Right
-    glVertex3f(1.0, -1.0, 0.0)          # Bottom Right
-    glVertex3f(-1.0, -1.0, 0.0)         # Bottom Left
-    glEnd()                             # We are done with the polygon
- 
-    """
- 
     #  since this is double buffered, swap the buffers to display what just got drawn. 
     glutSwapBuffers()
  
@@ -171,7 +138,7 @@ def main():
     # Okay, like the C version we retain the window id to use when closing, but for those of you new
     # to Python (like myself), remember this assignment would make the variable local and not global
     # if it weren't for the global declaration at the start of main.
-    window = glutCreateWindow("Jeff Molofee's GL Code Tutorial ... NeHe '99")
+    window = glutCreateWindow("ArtInTheDark 2012")
  
        # Register the drawing function with glut, BUT in Python land, at least using PyOpenGL, we need to
     # set the function pointer and invoke a function to actually register the callback, otherwise it

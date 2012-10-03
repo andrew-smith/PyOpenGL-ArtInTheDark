@@ -17,8 +17,25 @@ class MovingBlob:
     def __init__(self,x,y):
         self.x = x
         self.y = y
+        
+    
+    def getX(self):
+        return self.x
+        
+    def getY(self):
+        return self.y
+        
+    def setRandomGoTo(self):
+        """
+        Creates a random 2D position (debug blobs)
+        """
+        self.randomX = random.random() *6 -3
+        self.randomY = random.random() *6 -3
 
     def update(self):
+        """
+        Moves randomly based on the position generated from setRandomGoTo()
+        """
         BLOB_MOVEMENT = 0.01
         
         #move x
@@ -41,17 +58,6 @@ class MovingBlob:
             
         if self.y == self.randomY and self.x == self.randomX:
             self.setRandomGoTo()
-        
-        
-    def getX(self):
-        return self.x
-        
-    def getY(self):
-        return self.y
-        
-    def setRandomGoTo(self):
-        self.randomX = random.random() *6 -3
-        self.randomY = random.random() *6 -3
             
 
     def draw(self):
@@ -59,18 +65,9 @@ class MovingBlob:
         
         glTranslatef(self.x, self.y, 0.0)
         
-        #glBegin(GL_POLYGON)                 # Start drawing a polygon
-        glColor3f(1.0, 0.0, 0.0)            # Red
+        glColor3f(1.0, 0.0, 0.0) # Red
         
         glDrawCircle(0.1)
-        """
-        glVertex3f(0.0, 1.0, 0.0)           # Top
-        glColor3f(0.0, 1.0, 0.0)            # Green
-        glVertex3f(1.0, -1.0, 0.0)          # Bottom Right
-        glColor3f(0.0, 0.0, 1.0)            # Blue
-        glVertex3f(-1.0, -1.0, 0.0)         # Bottom Left
-        """
-        #glEnd()    
         
         glPopMatrix()
 
