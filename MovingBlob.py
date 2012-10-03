@@ -26,7 +26,7 @@ class MovingBlob:
         self.x = x
         self.y = y
         self.disposed = False
-        self.neighbour = None
+        self.neighbours = []
         self.rotation = random.random() * 360
     
     def isActive(self):
@@ -41,8 +41,11 @@ class MovingBlob:
         """
         self.disposed = True
         
-    def setNeighbour(self, neighbour):
-        self.neighbour = neighbour
+    def addNeighbour(self, neighbour):
+        self.neighbours.append(neighbour)
+        
+    def clearNeighbours(self):
+        self.neighbours = [] # reset the list
     
     def getX(self):
         return self.x
@@ -122,10 +125,10 @@ class MovingBlob:
             
             
     def drawNeighbourInteraction(self):
-        # draw line to neighbour
-        if self.neighbour != None:
-            neighbour = self.neighbour
+        thing = self.x
         
+        for neighbour in self.neighbours:
+            
             origDist = math.hypot(neighbour.getX() - self.getX(), neighbour.getY() - self.getY())
             dist = ensurePositiveNum(origDist)
                     
@@ -147,9 +150,9 @@ class MovingBlob:
                 glVertex2f(self.x, self.y)
                 #random inbetween position
                 glVertex2f(randomX, randomY)
-                glVertex2f(self.neighbour.getX(), self.neighbour.getY())
+                glVertex2f(neighbour.getX(), neighbour.getY())
                 
                 glEnd()
-            
+    
             
 

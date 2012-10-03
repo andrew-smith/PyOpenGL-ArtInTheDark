@@ -45,7 +45,6 @@ class BlobManager:
     def update(self):
         """
         Updates all the blobs.
-        TODO: will check blob positions to see if blobs are close to each other
         """
         for blob in self.blobs:
             blob.update()
@@ -53,17 +52,16 @@ class BlobManager:
         # checks for closest blobs
         if len(self.blobs) > 1:
             for blob in self.blobs:
-                closeBlob = None # the closest blob to "blob"
-                smallestDistance = sys.maxint
+                blob.clearNeighbours()
                 for blob2 in self.blobs:
                     if blob != blob2:
+                        # get distance between blobs
                         blob2Dist = math.hypot(blob2.getX() - blob.getX(), blob2.getY() - blob.getY())
                         if blob2Dist < 0:
                             blob2Dist *= -1
-                        if blob2Dist < smallestDistance:
-                            closeBlob = blob2
-                            smallestDistance = blob2Dist
-                blob.setNeighbour(closeBlob)
+                        if blob2Dist < 0.7: # this is the max distance for neighbours
+                            blob.addNeighbour(blob2)
+                
                         
                 
     
@@ -75,7 +73,8 @@ class BlobManager:
         """
         for blob in self.blobs:
             blob.draw()
-         # draw interaction afterwards so it appears behind base blobs
+        # draw interaction afterwards so it appears behind base blobs
+        # although transparency is a slight issue here
         for blob in self.blobs:
             blob.drawNeighbourInteraction()
         
