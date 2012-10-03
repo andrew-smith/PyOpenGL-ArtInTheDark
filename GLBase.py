@@ -43,6 +43,7 @@ from BlobManager import *
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
+from optparse import OptionParser
 import sys
 import random
  
@@ -56,6 +57,12 @@ window = 0
 
 # array of blobs to test with
 blobManager = BlobManager()
+
+
+# command line arguments configuration
+parser = OptionParser()
+parser.add_option("-f", "--fullscreen", action="store_true", help="Sets GLUT window to fullscreen")
+(options, args) = parser.parse_args()
 
  
 # A general OpenGL initialization function.  Sets all of the initial parameters. 
@@ -117,7 +124,7 @@ def keyPressed(*args):
         sys.exit()
  
 def main():
-    global window
+    global window, options
     # For now we just pass glutInit one empty argument. I wasn't sure what should or could be passed in (tuple, list, ...)
     # Once I find out the right stuff based on reading the PyOpenGL source, I'll address this.
     glutInit(sys.argv)
@@ -145,8 +152,9 @@ def main():
     # would be very much like the C version of the code.    
     glutDisplayFunc(DrawGLScene)
  
-    # Uncomment this line to get full screen.
-    #glutFullScreen()
+    # full screen.
+    if options.fullscreen:
+        glutFullScreen()
  
     # When we are doing nothing, redraw the scene.
     glutIdleFunc(DrawGLScene)
