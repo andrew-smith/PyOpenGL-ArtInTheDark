@@ -18,6 +18,7 @@ class MovingBlob:
         self.x = x
         self.y = y
         self.disposed = False
+        self.neighbour = None
     
     def isActive(self):
         """
@@ -31,6 +32,8 @@ class MovingBlob:
         """
         self.disposed = True
         
+    def setNeighbour(self, neighbour):
+        self.neighbour = neighbour
     
     def getX(self):
         return self.x
@@ -83,4 +86,15 @@ class MovingBlob:
         glDrawCircle(0.1)
         
         glPopMatrix()
+        
+        # draw line to neighbour
+        if self.neighbour != None:
+            glColor3f(0.0, 0.0, 1.0) # Blue
+            
+            glBegin(GL_LINES)
+            
+            glVertex2f(self.x, self.y)
+            glVertex2f(self.neighbour.getX(), self.neighbour.getY())
+            
+            glEnd()
 

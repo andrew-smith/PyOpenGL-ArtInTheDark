@@ -8,6 +8,14 @@ from OpenGL.GLU import *
 from MovingBlob import *
 import sys
 import random
+import math
+
+
+
+# helper function to get distance between two points
+
+    
+
 
 
 # A manager class to manage all the blobs
@@ -42,7 +50,20 @@ class BlobManager:
         for blob in self.blobs:
             blob.update()
         
-    
+        # checks for closest blobs
+        if len(self.blobs) > 1:
+            for blob in self.blobs:
+                closeBlob = None # the closest blob to "blob"
+                smallestDistance = 100000
+                for blob2 in self.blobs:
+                    if blob != blob2:
+                        blob2Dist = math.hypot(blob2.getX() - blob.getX(), blob2.getY() - blob.getY())
+                        if blob2Dist < smallestDistance:
+                            closeBlob = blob2
+                            smallestDistance = blob2Dist
+                blob.setNeighbour(closeBlob)
+                        
+                
     
     
     
