@@ -5,6 +5,7 @@ from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 import sys
+import math
 import random
 
 from GLCircles import *
@@ -19,6 +20,7 @@ class MovingBlob:
         self.y = y
         self.disposed = False
         self.neighbour = None
+        self.rotation = random.random() * 360
     
     def isActive(self):
         """
@@ -75,6 +77,11 @@ class MovingBlob:
         if self.y == self.randomY and self.x == self.randomX:
             self.setRandomGoTo()
             
+        #add some rotation
+        self.rotation += 4
+        if self.rotation > 360:
+            self.rotation = 0
+            
 
     def draw(self):
         glPushMatrix()
@@ -83,7 +90,21 @@ class MovingBlob:
         
         glColor3f(1.0, 0.0, 0.0) # Red
         
+        # draw center circle
         glDrawCircle(0.1)
+        
+        # draw 3 circles circling it
+        glRotatef(self.rotation, 0, 0, 1)
+        
+        
+        circleRotations = [0, 120, 240]
+        
+        for rotation in circleRotations:
+            glPushMatrix()
+            glRotatef(rotation, 0, 0, 1)
+            glTranslatef(0.0, 0.2, 0.0)
+            glDrawCircle(0.05)
+            glPopMatrix()
         
         glPopMatrix()
         
