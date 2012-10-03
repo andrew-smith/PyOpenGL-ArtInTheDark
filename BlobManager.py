@@ -58,6 +58,8 @@ class BlobManager:
                 for blob2 in self.blobs:
                     if blob != blob2:
                         blob2Dist = math.hypot(blob2.getX() - blob.getX(), blob2.getY() - blob.getY())
+                        if blob2Dist < 0:
+                            blob2Dist *= -1
                         if blob2Dist < smallestDistance:
                             closeBlob = blob2
                             smallestDistance = blob2Dist
@@ -73,5 +75,8 @@ class BlobManager:
         """
         for blob in self.blobs:
             blob.draw()
+         # draw interaction afterwards so it appears behind base blobs
+        for blob in self.blobs:
+            blob.drawNeighbourInteraction()
         
 

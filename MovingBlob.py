@@ -11,6 +11,13 @@ import random
 from GLCircles import *
 
 
+# helper function to reverse negative numbers
+def ensurePositiveNum(value):
+    if value < 0:
+        value *= -1
+    return value
+
+
 # Defines a moving blob in a 2D world
 
 class MovingBlob:
@@ -109,14 +116,40 @@ class MovingBlob:
         
         glPopMatrix()
         
+        
+            
+            
+            
+            
+    def drawNeighbourInteraction(self):
         # draw line to neighbour
         if self.neighbour != None:
-            glColor3f(0.0, 0.0, 1.0) # Blue
+            neighbour = self.neighbour
+        
+            origDist = math.hypot(neighbour.getX() - self.getX(), neighbour.getY() - self.getY())
+            dist = ensurePositiveNum(origDist)
+                    
+            if dist <= 0.8: # the maximum distance to start interacting with another blob
+
+
+                #find distance to each coordinate 
+                boundsX = self.getX() - neighbour.getX()
+                boundsY = self.getY() - neighbour.getY()
+                
+                
+                randomX = self.getX() - boundsX/2 + ((random.random() * 0.3)-0.15)
+                randomY = self.getY() - boundsY/2 + ((random.random() * 0.3)-0.15)
+
+                glColor4f(1.0, 1.0, 0.0, 0.7) # Transparent Yellow
+                
+                glBegin(GL_LINE_STRIP)
+                
+                glVertex2f(self.x, self.y)
+                #random inbetween position
+                glVertex2f(randomX, randomY)
+                glVertex2f(self.neighbour.getX(), self.neighbour.getY())
+                
+                glEnd()
             
-            glBegin(GL_LINES)
             
-            glVertex2f(self.x, self.y)
-            glVertex2f(self.neighbour.getX(), self.neighbour.getY())
-            
-            glEnd()
 
