@@ -92,8 +92,12 @@ def DrawGLScene():
     # move drawing curser back
     glTranslatef(0.0, 0.0, -6.0)
     
-    testBlob.update()
+    glPushMatrix()
+    
+    testBlob.update(0.2, 0.2)
     testBlob.draw()
+    
+    glPopMatrix()
     
     # testBlob.Draw()
     
