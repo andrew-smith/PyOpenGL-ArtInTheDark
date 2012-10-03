@@ -9,7 +9,7 @@ __version__ = string.split('$Revision: 1.1.1.1 $')[1]
 __date__ = string.join(string.split('$Date: 2007/02/15 19:25:21 $')[1:3], ' ')
 __author__ = 'Tarn Weisner Burton <twburton@users.sourceforge.net>'
 
-from MovingBlob import *
+from BlobManager import *
 
  
 #
@@ -55,10 +55,7 @@ window = 0
 
 
 # array of blobs to test with
-testBlobs = []
-for i in range(1, 10):
-    testBlobs.append(MovingBlob(random.random() *6 -3, random.random() *6 -3))
-
+blobManager = BlobManager()
 
  
 # A general OpenGL initialization function.  Sets all of the initial parameters. 
@@ -89,7 +86,7 @@ def ReSizeGLScene(Width, Height):
  
 # The main drawing function. 
 def DrawGLScene():
-    global testBlobs
+    global blobManager
     
     # Clear The Screen And The Depth Buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -99,12 +96,10 @@ def DrawGLScene():
     glTranslatef(0.0, 0.0, -6.0)
     
     
-    
-    for blob in testBlobs:
-        glPushMatrix()
-        blob.update()
-        blob.draw()
-        glPopMatrix()
+    glPushMatrix()
+    blobManager.update()
+    blobManager.draw()
+    glPopMatrix()
     
  
     #  since this is double buffered, swap the buffers to display what just got drawn. 
@@ -117,7 +112,7 @@ def keyPressed(*args):
         sys.exit()
  
 def main():
-    global window, testBlobs
+    global window
     # For now we just pass glutInit one empty argument. I wasn't sure what should or could be passed in (tuple, list, ...)
     # Once I find out the right stuff based on reading the PyOpenGL source, I'll address this.
     glutInit(sys.argv)
@@ -144,10 +139,6 @@ def main():
     # set the function pointer and invoke a function to actually register the callback, otherwise it
     # would be very much like the C version of the code.    
     glutDisplayFunc(DrawGLScene)
-    
-    # create random movements
-    for blob in testBlobs:
-        blob.setRandomGoTo()
  
     # Uncomment this line to get full screen.
     #glutFullScreen()

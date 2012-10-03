@@ -17,6 +17,19 @@ class MovingBlob:
     def __init__(self,x,y):
         self.x = x
         self.y = y
+        self.disposed = False
+    
+    def isActive(self):
+        """
+        If this blob is still active in the world
+        """    
+        return not self.disposed
+        
+    def dispose(self):
+        """
+        Disposes this blob - should no longer be updated
+        """
+        self.disposed = True
         
     
     def getX(self):
