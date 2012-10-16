@@ -19,7 +19,6 @@ class ClientConnection:
         
         
         
-        
     def startServer(self):
         """ Starts the socket """
         # create the socket
@@ -57,9 +56,15 @@ class ClientConnection:
             data = data.strip()
             # reply = "received: " + data;
             
-            if data.find('start') == 0:
+            if data.find('start') == 0: # reset the points
                 print "refreshing point array"
                 self.points = []
+                
+            elif data.find('end') == 0: # sent the points to the blob manager
+                # TODO THIS Section
+                self.blobManager = None # THIS NEEDS TO BE IMPLEMENTED
+                # self.blobManager.setPoints(self.points) # sends the points to the blob manager
+            
             else:
                 print "received: " + data;
                 # attempt to cast it to a point
