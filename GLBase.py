@@ -46,6 +46,9 @@ from OpenGL.GLU import *
 from optparse import OptionParser
 import sys
 import random
+
+from ConnectionManager import *
+from GLCircles import *
  
 # Some api in the chain is translating the keystrokes to this octal string
 # so instead of saying: ESCAPE = 27, we use the following.
@@ -57,6 +60,10 @@ window = 0
 
 # array of blobs to test with
 blobManager = BlobManager()
+
+# test server
+client = ClientConnection() 
+client.startServer()
 
 
 # command line arguments configuration
@@ -93,7 +100,7 @@ def ReSizeGLScene(Width, Height):
  
 # The main drawing function. 
 def DrawGLScene():
-    global blobManager
+    global blobManager, client
     
     # Clear The Screen And The Depth Buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -111,8 +118,20 @@ def DrawGLScene():
     
     
     glPushMatrix()
-    blobManager.update()
-    blobManager.draw()
+    
+    for p in client.points:
+        
+        x = ((p[0] / 640.0) * 6.0) - 3.0
+        y = (((480.0 - p[1]) / 480.0) * 6.0) - 3.0
+    
+        glPushMatrix()
+        glTranslatef(x, y, 0)
+        glDrawCircle(0.1)
+        glPopMatrix()
+        
+    
+    #blobManager.update()
+    #blobManager.draw()
     glPopMatrix()
     
  

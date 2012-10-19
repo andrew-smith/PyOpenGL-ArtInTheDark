@@ -7,7 +7,7 @@ from thread import *
 HOST = 'localhost';
 PORT = 8887;
 
-DEBUG = True
+DEBUG = False
 
 
 # manages a connection from a client sending coordinates
@@ -59,12 +59,8 @@ class ClientConnection:
             if len(data) > 1:
                 self.points = pickle.loads(data)
                 
-                """
-                print "new data!"
-                for p in self.points:
-                    print str(p[0]) + " - " + str(p[1])
-                print " ------- "
-                """
+                print self.points
+                
         conn.close()
 
 
