@@ -28,6 +28,8 @@ class MovingBlob:
         self.disposed = False
         self.neighbours = []
         self.rotation = random.random() * 360
+        self.oldPoints = []
+        self.updateCount = 0
     
     def isActive(self):
         """
@@ -65,6 +67,17 @@ class MovingBlob:
         Moves randomly based on the position generated from setRandomGoTo()
         """
         BLOB_MOVEMENT = 0.01
+        
+        
+        #self.updateCount += 1
+        
+        
+        #if self.updateCount is 30:
+        self.oldPoints.append( (self.x, self.y) )
+            #self.updateCount = 0
+        # only hold the last 100 points
+        if len(self.oldPoints) > 280 :
+            self.oldPoints.pop(0)
         
         #move x
         if self.randomX > self.x:
@@ -119,7 +132,18 @@ class MovingBlob:
         
             
             
-            
+    def drawTrails(self):
+    
+        glLineWidth(1)
+        #glEnable(GL_LINE_SMOOTH)
+        glBegin(GL_LINE_STRIP)
+        
+        glColor4f(1.0, 1.0, 1.0, 1.0) # WHITE
+        
+        for point in self.oldPoints:
+            glVertex2f(point[0], point[1])
+        glEnd()
+        
             
     def drawNeighbourInteraction(self):
         thing = self.x

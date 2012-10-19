@@ -71,11 +71,21 @@ class BlobManager:
         """
         Draws all the blobs
         """
+        glTranslatef(0.0, 0.0, 0.01);
         for blob in self.blobs:
-            blob.draw()
-        # draw interaction afterwards so it appears behind base blobs
+            blob.drawTrails()
+        
+         # draw interaction afterwards so it appears behind base blobs
         # although transparency is a slight issue here
+        glTranslatef(0.0, 0.0, 0.01);
         for blob in self.blobs:
             blob.drawNeighbourInteraction()
+            
+        glTranslatef(0.0, 0.0,0.01);
+        for blob in self.blobs:
+            blob.draw()
+       
+            
+        
         
 
