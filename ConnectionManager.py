@@ -1,6 +1,7 @@
 
 import socket
 import sys
+import cPickle as pickle
 from thread import *
 
 HOST = 'localhost';
@@ -54,32 +55,16 @@ class ClientConnection:
         while True:
             data = conn.recv(1024)
             data = data.strip()
-            # reply = "received: " + data;
             
-            if data.find('start') == 0: # reset the points
-                print "refreshing point array"
-                self.points = []
+            if len(data) > 1:
+                self.points = pickle.loads(data)
                 
-            elif data.find('end') == 0: # sent the points to the blob manager
-                # TODO THIS Section
-                self.blobManager = None # THIS NEEDS TO BE IMPLEMENTED
-                # self.blobManager.setPoints(self.points) # sends the points to the blob manager
-            
-            else:
-                print "received: " + data;
-                # attempt to cast it to a point
-                sA, sB, sC = data.partition(",")
-                
-                if sB is ',' and sA is not None and sC is not None:
-                    self.points.append( (sA.strip(), sC.strip()) )
-                else:
-                    print "\"" + data + "\" is not valid"
-                    
-                
-            print self.points
-            
-            # conn.sendall(reply) # send reply
-        
+                """
+                print "new data!"
+                for p in self.points:
+                    print str(p[0]) + " - " + str(p[1])
+                print " ------- "
+                """
         conn.close()
 
 
