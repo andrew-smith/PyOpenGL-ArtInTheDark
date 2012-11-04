@@ -47,7 +47,16 @@ class ClientConnection:
         """ Client listener to be in it's own thread """
         """ Only one client will be accepted """
         print "waiting for connection..."
-        conn, addr = self.socket.accept() # blocking until client connected 
+        isClientConnected = False
+        while not isClientConnected:
+            try:
+                conn, addr = self.socket.accept() # blocking until client connected 
+                isClientConnected = True
+            except socket.error as (errno, msg):
+                if errno != 4:
+                    raise
+                print "error: " + str(errno)
+         
         print "! Client Connected !"
         print "address: " + addr[0] + ':' + str(addr[1])
 
