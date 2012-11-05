@@ -68,21 +68,9 @@ class ClientConnection:
             if len(data) > 1:
                 self.points = pickle.loads(data)
                 
-                print self.points
+                if DEBUG:
+                    print self.points
                 
         conn.close()
 
-
-
-
-# TESTING CODE
-if DEBUG:
-    listener = ClientConnection()
-    listener.startServer()
-    
-    print "testing server has started"
-    
-    while True:
-        # wait for input
-        data = 1
 

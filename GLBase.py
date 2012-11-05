@@ -61,10 +61,6 @@ window = 0
 # array of blobs to test with
 blobManager = BlobManager()
 
-# test server
-client = ClientConnection() 
-client.startServer()
-
 
 # command line arguments configuration
 parser = OptionParser()
@@ -118,7 +114,7 @@ def DrawGLScene():
     
     
     glPushMatrix()
-    
+    """
     for p in client.points:
         
         x = ((p[0] / 640.0) * 6.0) - 3.0
@@ -129,9 +125,11 @@ def DrawGLScene():
         glDrawCircle(0.1)
         glPopMatrix()
         
+    """
     
-    #blobManager.update()
-    #blobManager.draw()
+    blobManager.update()
+    blobManager.draw()
+    
     glPopMatrix()
     
  
