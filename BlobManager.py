@@ -12,6 +12,11 @@ import random
 import math
 
 
+# helper function to remove blobs from lists who aren't updated
+
+
+
+
 # A manager class to manage all the blobs
 
 class BlobManager:
@@ -29,19 +34,58 @@ class BlobManager:
         Updates all the blobs.
         """
         
-        # grab the latest blob centroids and update
+        """
+        Each point sent from the client searches an area around it
+        to see if this point is from an existing point (from the last update).
+        
+        This area is also the same size as points that interact with each other.
+        If two blobs come together as one then an effect needs to be displayed.
+        This will have to be configured on site when tweaking the camera position.
+        
+        This interaction_value is how many OpenGL units radius to search for the 
+        last position
+        TODO tweak this value to suit site
+        """
+        
+        interaction_value = 0.25
+        
+        # alert blobs that a new update is coming
+        for blob in self.blobs:
+            blob.updated = False
+        
+        # grab the latest blob centroids from client
         for p in self.client.points:
             # get 2D coordinates
             x = ((p[0] / 640.0) * 6.0) - 3.0
             y = (((480.0 - p[1]) / 480.0) * 6.0) - 3.0
             
-            
-            print str(p)
+            # loop through current blobs to try and find this blob
+            lastBlobfound = None
+            for blob in self.blobs:
+                if blob.x > x - interaction_value and blob.x < x + interaction_value:
+                    lastBlobfound = blob
+                    blob.x = x
+                    blob.y = y
+                
+            # if blob was not found then create a new one    
+            if lastBlobfound is None:
+                self.blobs.append(MovingBlob(x,y))
+            else:
+                blob.updated = True
+                
         
+        # now remove all blobs that weren't updated
+        blobsToRemove = []
         
-        # loop through blobs
         for blob in self.blobs:
-            print str(blob)
+            if not blob.updated:
+                blobsToRemove.append(blob)                
+        for blob in blobsToRemove:
+            self.blobs.remove(blob)
+        
+        # update all remaining blobs
+        for blob in self.blobs:
+            blob.update()
                 
     
     
@@ -50,7 +94,11 @@ class BlobManager:
         """
         Draws all the blobs
         """
-        glTranslatef(0.0, 0.0, 0.01);
+        glTranslatef(0.0, 0.0, 0.01)
+        
+        for blob in self.blobs:
+            blob.draw()
+            
         
         """
         for blob in self.blobs:

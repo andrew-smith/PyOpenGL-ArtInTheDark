@@ -18,8 +18,6 @@ class ClientConnection:
         self.points = []
         
         
-        
-        
     def startServer(self):
         """ Starts the socket """
         # create the socket
