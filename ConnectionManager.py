@@ -58,6 +58,11 @@ class ClientConnection:
         print "! Client Connected !"
         print "address: " + addr[0] + ':' + str(addr[1])
 
+        # first recv is width [0] and height [1]
+        resolutionTup = conn.recv(1024)
+        resolutionTup = pickle.loads(resolutionTup)
+        
+        
         
         while True:
             data = conn.recv(1024)
