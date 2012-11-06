@@ -10,6 +10,16 @@ import random
 
 from GLCircles import *
 
+# how many old points to keep track of
+AMT_OLD_POINTS = 80
+
+# class/enum to set drawing mode
+class DrawMode:
+    RotatingBlobs=1 # circle with circles rotating around
+    BlobTrails=2 # bloby trails that disappear (show where the blob has been)
+    
+
+
 
 # helper function to reverse negative numbers
 def ensurePositiveNum(value):
@@ -27,6 +37,7 @@ class MovingBlob:
         self.y = y
         self.disposed = False
         self.rotation = 0
+        self.drawmode = DrawMode.BlobTrails
         
         self.oldPoints = []
         
@@ -69,8 +80,8 @@ class MovingBlob:
         Updates the blob (rotation, colours, effects, etc...)
         """
         if self.isActive():
-            # only hold the last 280 points
-            if len(self.oldPoints) > 280 :
+            # only hold the last AMT_OLD_POINTS points
+            while len(self.oldPoints) > AMT_OLD_POINTS :
                 self.oldPoints.pop(0)
                 
             # add some rotation
@@ -82,27 +93,59 @@ class MovingBlob:
     def draw(self):
     
         if self.isActive():
-            glPushMatrix()
-            
-            glTranslatef(self.x, self.y, 0.0)
-            
-            glColor3f(1.0, 0.0, 0.0) # Red
-            
-            # draw center circle
-            glDrawTransparentCircle(0.1, 1.0, 0.0, 0.0)
-            
-            # draw 3 circles circling it
-            glRotatef(self.rotation, 0, 0, 1)
-            circleRotations = [0, 120, 240]
-            
-            for rotation in circleRotations:
-                glPushMatrix()
-                glRotatef(rotation, 0, 0, 1)
-                glTranslatef(0.0, 0.2, 0.0)
-                glColor3f(0.0, 0.0, 1.0) # Blue
-                glDrawTransparentCircle(0.05, 0.0, 0.0, 1.0)
-                glPopMatrix()
-            
-            glPopMatrix()
+            if self.drawmode is DrawMode.BlobTrails:
+                draw_blob_trails(self)
+            else: 
+                draw_rotating_blobs(self)
 
+
+
+
+
+
+
+def draw_rotating_blobs(blob):
+    glPushMatrix()
+    
+    glTranslatef(blob.x, blob.y, 0.0)
+    
+    glColor3f(1.0, 0.0, 0.0) # Red
+    
+    # draw center circle
+    glDrawTransparentCircle(0.1, 1.0, 0.0, 0.0)
+    
+    # draw 3 circles circling it
+    glRotatef(blob.rotation, 0, 0, 1)
+    circleRotations = [0, 120, 240]
+    
+    for rotation in circleRotations:
+        glPushMatrix()
+        glRotatef(rotation, 0, 0, 1)
+        glTranslatef(0.0, 0.2, 0.0)
+        glColor3f(0.0, 0.0, 1.0) # Blue
+        glDrawTransparentCircle(0.05, 0.0, 0.0, 1.0)
+        glPopMatrix()
+    
+    glPopMatrix()
+
+
+def draw_blob_trails(blob):
+    
+    current_point_index = AMT_OLD_POINTS
+    for p in reversed(blob.oldPoints):
+        glPushMatrix()
+        x = p[0]
+        y = p[1]
+        
+        glTranslatef(x, y, 0.0)
+        
+        radius = math.sin((math.pi / AMT_OLD_POINTS) * current_point_index) * 0.2
+        
+        glColor3f(1.0, 1.0, 0.0) # Green/Yellow
+        glDrawCircle(radius)
+        
+        
+        current_point_index = current_point_index - 1
+        glPopMatrix()
+        
 
