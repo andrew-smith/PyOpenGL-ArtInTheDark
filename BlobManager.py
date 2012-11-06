@@ -47,7 +47,7 @@ class BlobManager:
         TODO tweak this value to suit site
         """
         
-        interaction_value = 0.5
+        interaction_value = 0.25
         
         if self.client.hasNewData:
             # alert blobs that a new update is coming

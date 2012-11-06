@@ -37,7 +37,7 @@ class MovingBlob:
         self.y = y
         self.disposed = False
         self.rotation = 0
-        self.drawmode = DrawMode.BlobTrails
+        self.drawmode = DrawMode.RotatingBlobs
         
         self.oldPoints = []
         
