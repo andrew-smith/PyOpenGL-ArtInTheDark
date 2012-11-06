@@ -65,7 +65,7 @@ class BlobManager:
                 # loop through current blobs to try and find this blob
                 lastBlobfound = None
                 for blob in self.blobs:
-                    if blob.x > x - interaction_value and blob.x < x + interaction_value:
+                    if lastBlobfound is None and blob.x > x - interaction_value and blob.x < x + interaction_value:
                         lastBlobfound = blob
                         blob.updateReferenceCount = blob.updateReferenceCount + 1
                         blob.move(x,y)
