@@ -49,43 +49,47 @@ class BlobManager:
         
         interaction_value = 0.25
         
-        # alert blobs that a new update is coming
-        for blob in self.blobs:
-            blob.updated = False
-        
-        # grab the latest blob centroids from client
-        for p in self.client.points:
-            # get 2D coordinates
-            x = ((p[0] / 640.0) * 6.0) - 3.0
-            y = (((480.0 - p[1]) / 480.0) * 6.0) - 3.0
-            
-            # loop through current blobs to try and find this blob
-            lastBlobfound = None
+        if self.client.hasNewData:
+            # alert blobs that a new update is coming
             for blob in self.blobs:
-                if blob.x > x - interaction_value and blob.x < x + interaction_value:
-                    lastBlobfound = blob
-                    blob.x = x
-                    blob.y = y
+                blob.updateReferenceCount = 0
+            
+            # grab the latest blob centroids from client
+            latestPoints = self.client.get_new_points()
+            for p in latestPoints:
+                # get 2D coordinates
+                x = ((p[0] / 640.0) * 6.0) - 3.0
+                y = (((480.0 - p[1]) / 480.0) * 6.0) - 3.0
                 
-            # if blob was not found then create a new one    
-            if lastBlobfound is None:
-                self.blobs.append(MovingBlob(x,y))
-            else:
-                blob.updated = True
-                
-        
-        # now remove all blobs that weren't updated
-        blobsToRemove = []
-        
-        for blob in self.blobs:
-            if not blob.updated:
-                blobsToRemove.append(blob)                
-        for blob in blobsToRemove:
-            self.blobs.remove(blob)
-        
-        # update all remaining blobs
-        for blob in self.blobs:
-            blob.update()
+                # loop through current blobs to try and find this blob
+                lastBlobfound = None
+                for blob in self.blobs:
+                    if lastBlobfound is None and blob.x > x - interaction_value and blob.x < x + interaction_value:
+                        lastBlobfound = blob
+                        blob.move(x,y)
+                    
+                # if blob was not found then create a new one    
+                if lastBlobfound is None:
+                    self.blobs.append(MovingBlob(x,y))
+                else:
+                    blob.updateReferenceCount = blob.updateReferenceCount + 1
+                    
+            
+            
+            
+            # now remove all blobs that weren't updated
+            blobsToRemove = []
+            
+            for blob in self.blobs:
+                if blob.updateReferenceCount is 0:
+                    blobsToRemove.append(blob)                
+            for blob in blobsToRemove:
+                blob.dispose()
+                self.blobs.remove(blob)
+            
+            # update all blobs
+            for blob in self.blobs:
+                blob.update()
                 
     
     

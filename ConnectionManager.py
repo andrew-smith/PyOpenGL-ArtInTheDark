@@ -16,6 +16,7 @@ class ClientConnection:
 
     def __init__(self):
         self.points = []
+        self.hasNewData = False
         
         
     def startServer(self):
@@ -40,6 +41,11 @@ class ClientConnection:
         # start new thread to listen for incomming connections
         start_new_thread(self.client_listener, ())
             
+        
+    def get_new_points(self):
+        self.hasNewData = False
+        return self.points
+        
             
     def client_listener(self):
         """ Client listener to be in it's own thread """
@@ -70,6 +76,7 @@ class ClientConnection:
             
             if len(data) > 1:
                 self.points = pickle.loads(data)
+                self.hasNewData = True
                 
                 if DEBUG:
                     print self.points

@@ -31,8 +31,12 @@ class MovingBlob:
         self.oldPoints = []
         
         # used to keep track of blob being updated
-        # if this is false after an update has occured - this blob will be discarded
-        self.updated = True
+        # 0  = no blobs referenced this - remove it as blob has disappeared
+        # 1  = a single blob referenced this - good
+        # >1 = more than one blob thinks this blob is it. This happens when 
+        #      two or more blobs collide/come close to each other.
+        #      A special effect should be started!
+        self.updateReferenceCount = 1
         
     
     def isActive(self):
