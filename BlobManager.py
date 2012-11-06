@@ -47,7 +47,7 @@ class BlobManager:
         TODO tweak this value to suit site
         """
         
-        interaction_value = 0.25
+        interaction_value = 0.5
         
         if self.client.hasNewData:
             # alert blobs that a new update is coming
@@ -61,20 +61,20 @@ class BlobManager:
                 x = ((p[0] / 640.0) * 6.0) - 3.0
                 y = (((480.0 - p[1]) / 480.0) * 6.0) - 3.0
                 
+                
                 # loop through current blobs to try and find this blob
                 lastBlobfound = None
                 for blob in self.blobs:
-                    if lastBlobfound is None and blob.x > x - interaction_value and blob.x < x + interaction_value:
+                    if blob.x > x - interaction_value and blob.x < x + interaction_value:
                         lastBlobfound = blob
+                        blob.updateReferenceCount = blob.updateReferenceCount + 1
                         blob.move(x,y)
                     
                 # if blob was not found then create a new one    
                 if lastBlobfound is None:
                     self.blobs.append(MovingBlob(x,y))
-                else:
-                    blob.updateReferenceCount = blob.updateReferenceCount + 1
-                    
-            
+                
+                
             
             
             # now remove all blobs that weren't updated
@@ -82,7 +82,7 @@ class BlobManager:
             
             for blob in self.blobs:
                 if blob.updateReferenceCount is 0:
-                    blobsToRemove.append(blob)                
+                    blobsToRemove.append(blob)
             for blob in blobsToRemove:
                 blob.dispose()
                 self.blobs.remove(blob)
