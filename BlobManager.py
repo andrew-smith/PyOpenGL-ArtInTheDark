@@ -12,6 +12,10 @@ import random
 import math
 
 
+# limit amount of effects there can be
+MAX_EFFECTS_COUNT = 300
+
+
 # A manager class to manage all the blobs
 
 class BlobManager:
@@ -107,6 +111,10 @@ class BlobManager:
             # remove all finished effects
             for effect in effectsToRemove:
                 self.effects.remove(effect)
+                
+            # limit on how many effects are displayed
+            while len(self.effects) > MAX_EFFECTS_COUNT:
+                self.effects.pop(0)
             
     
     
