@@ -58,6 +58,8 @@ ESCAPE = '\033'
 window = 0
 
 
+REVERSE_DISPLAY = False
+
 # array of blobs to test with
 blobManager = BlobManager()
 
@@ -109,8 +111,13 @@ def DrawGLScene():
     
     glClearColor(0.0,0.0,0.0,0.0)
     
+    
+    
     # move drawing curser back
     glTranslatef(0.0, 0.0, -6.0)
+    
+    if REVERSE_DISPLAY:
+        glRotatef(180, 0.0, 1.0, 0.0)
     
     
     glPushMatrix()
