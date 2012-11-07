@@ -20,6 +20,7 @@ class DrawMode:
     RotatingBlobs=1 # circle with circles rotating around
     BlobPhatTrails=2 # bloby trails that disappear (show where the blob has been)
     BlobTrails=3 #thin trailing lines (show where the blob has been)
+    BubblesBubblesBubbles=4
   
     
 
@@ -42,6 +43,7 @@ class MovingBlob:
         self.disposed = False
         self.rotation = 0
         self.drawmode = CURRENT_DRAW_MODE
+        self.emitter = emitter
         
         # if the draw mode has an effect to emit - do it now
         # effect emitter (has the function emit_effect)
@@ -98,6 +100,9 @@ class MovingBlob:
             self.rotation += 4
             if self.rotation > 360:
                 self.rotation = 0
+                
+            if self.drawmode is DrawMode.BubblesBubblesBubbles:
+                handle_bubbles(self)
             
 
     def draw(self):
@@ -105,8 +110,8 @@ class MovingBlob:
         if self.isActive():
             if self.drawmode is DrawMode.BlobPhatTrails:
                 draw_blob_phat_trails(self)
-            #elif self.drawmode is DrawMode.BlobTrails:
-            #    draw_blob_trails(self)
+            #elif self.drawmode is DrawMode.BubblesBubblesBubbles:
+            #    handle_bubbles(self)
             #else: 
             #    draw_rotating_blobs(self)
 
@@ -162,7 +167,8 @@ def draw_blob_phat_trails(blob):
         
         
         
-        
+# thin trailing line that folows blobs
+# 3D enabled and alpha transparency so that lines overlap each other and get brighter
 class BlobTrailEffect:
 
 
@@ -170,6 +176,7 @@ class BlobTrailEffect:
         self.blob = blob
         self.points = []
         self.finished = False
+        self.colour = (random.random(), random.random(), random.random())
         
         # this tells the effect to dispose
         # when this reaches zero
@@ -196,7 +203,7 @@ class BlobTrailEffect:
         glTranslatef(0.0, 0.0, 0.01)
     
         glPushMatrix()
-        glColor4f(COLOUR_MAIN[0], COLOUR_MAIN[1], COLOUR_MAIN[2], 0.35) # Green/Yellow
+        glColor4f(self.colour[0], self.colour[1], self.colour[2], 0.35) 
         
         glBegin(GL_LINE_STRIP)
         
@@ -211,8 +218,67 @@ class BlobTrailEffect:
         glPopMatrix()
     
 
-def draw_bubbles(blob):
-    thing=None
+
+# handles creating bubbles from blobs
+def handle_bubbles(blob):
+    blob.emitter.emit_effect(BubbleParticleEffect(blob.x,blob.y))
+    
+
+
+class BubbleParticleEffect:
+    
+    def __init__(self,x,y):
+    
+        self.x = x
+        self.y = y
+        self.gravity = -0.1
+        self.alpha = 1.0
+        self.finished = False
+        self.ttl = 25
+        
+    
+    
+    
+    def update(self):
+        self.alpha = self.alpha - 0.02
+        self.y = self.y + self.gravity
+        
+        self.ttl -= 1
+        
+        if self.y < -10 or self.ttl < 1:
+            self.finished = True
+        
+        
+        
+    def draw(self):
+        glPushMatrix()
+        
+        glTranslatef(self.x, self.y, 0.0)
+        
+        glColor4f(COLOUR_MAIN[0], COLOUR_MAIN[1], COLOUR_MAIN[2], self.alpha)
+        glDrawCircle(0.05)
+        
+        glPopMatrix()
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
 
 
