@@ -16,7 +16,8 @@ AMT_OLD_POINTS = 80
 # class/enum to set drawing mode
 class DrawMode:
     RotatingBlobs=1 # circle with circles rotating around
-    BlobTrails=2 # bloby trails that disappear (show where the blob has been)
+    BlobPhatTrails=2 # bloby trails that disappear (show where the blob has been)
+    BlobTrails=3 #thin trailing lines (show where the blob has been)
     
 
 
@@ -37,7 +38,7 @@ class MovingBlob:
         self.y = y
         self.disposed = False
         self.rotation = 0
-        self.drawmode = DrawMode.RotatingBlobs
+        self.drawmode = DrawMode.BlobTrails
         
         self.oldPoints = []
         
@@ -93,7 +94,9 @@ class MovingBlob:
     def draw(self):
     
         if self.isActive():
-            if self.drawmode is DrawMode.BlobTrails:
+            if self.drawmode is DrawMode.BlobPhatTrails:
+                draw_blob_phat_trails(self)
+            elif self.drawmode is DrawMode.BlobTrails:
                 draw_blob_trails(self)
             else: 
                 draw_rotating_blobs(self)
@@ -129,7 +132,7 @@ def draw_rotating_blobs(blob):
     glPopMatrix()
 
 
-def draw_blob_trails(blob):
+def draw_blob_phat_trails(blob):
     
     current_point_index = AMT_OLD_POINTS
     for p in reversed(blob.oldPoints):
@@ -148,4 +151,28 @@ def draw_blob_trails(blob):
         current_point_index = current_point_index - 1
         glPopMatrix()
         
+
+def draw_blob_trails(blob):
+
+    glLineWidth(2.0)
+    
+    glPushMatrix()
+    glColor3f(1.0, 1.0, 0.0) # Green/Yellow
+    
+    glBegin(GL_LINE_STRIP)
+    
+    # do current point
+    glVertex2f(blob.x, blob.y)
+    
+
+    for p in reversed(blob.oldPoints):
+        x = p[0]
+        y = p[1]
+        
+        glVertex2f(x, y)
+        
+        
+    glEnd()
+    glPopMatrix()
+    
 
