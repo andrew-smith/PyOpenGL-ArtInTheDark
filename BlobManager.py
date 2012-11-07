@@ -22,7 +22,14 @@ class BlobManager:
         self.client = ClientConnection() 
         self.client.startServer()
         
+        # list of effects that aren't attached to blobs 
+        self.effects = []
         
+        
+        
+    # called from a blob to emit an effect that shouldn't disappear when the blob does
+    def emit_effect(self, effect):
+        self.effects.append(effect)
         
     def update(self):
         global COLOUR_MAIN
@@ -68,7 +75,7 @@ class BlobManager:
                     
                 # if blob was not found then create a new one    
                 if lastBlobfound is None:
-                    self.blobs.append(MovingBlob(x,y))
+                    self.blobs.append(MovingBlob(x,y,self))
                 
                 
             
@@ -87,6 +94,19 @@ class BlobManager:
             for blob in self.blobs:
                 blob.update()
                 
+                
+            # update all the effects
+            effectsToRemove = []
+            for effect in self.effects:
+                effect.update()
+                # if it is finished - remove it
+                if effect.finished:
+                    effectsToRemove.append(effect)
+                
+            # remove all finished effects
+            for effect in effectsToRemove:
+                self.effects.remove(effect)
+            
     
     
     
@@ -98,23 +118,10 @@ class BlobManager:
         
         for blob in self.blobs:
             blob.draw()
-            
-        
-        """
-        for blob in self.blobs:
-            blob.drawTrails()
-        
-         # draw interaction afterwards so it appears behind base blobs
-        # although transparency is a slight issue here
-        glTranslatef(0.0, 0.0, 0.01);
-        for blob in self.blobs:
-            blob.drawNeighbourInteraction()
-            
-        glTranslatef(0.0, 0.0,0.01);
-        for blob in self.blobs:
-            blob.draw()
-        """
-            
+           
+        glTranslatef(0.0, 0.0, 0.01)
+        for effect in self.effects:
+            effect.draw()
         
         
 

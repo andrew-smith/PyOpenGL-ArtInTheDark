@@ -20,9 +20,10 @@ class DrawMode:
     RotatingBlobs=1 # circle with circles rotating around
     BlobPhatTrails=2 # bloby trails that disappear (show where the blob has been)
     BlobTrails=3 #thin trailing lines (show where the blob has been)
+  
     
 
-
+CURRENT_DRAW_MODE = DrawMode.BlobTrails
 
 # helper function to reverse negative numbers
 def ensurePositiveNum(value):
@@ -35,13 +36,19 @@ def ensurePositiveNum(value):
 
 class MovingBlob:
 
-    def __init__(self,x,y):
+    def __init__(self,x,y,emitter):
         self.x = x
         self.y = y
         self.disposed = False
         self.rotation = 0
-        self.drawmode = DrawMode.BlobTrails
+        self.drawmode = CURRENT_DRAW_MODE
         
+        # if the draw mode has an effect to emit - do it now
+        # effect emitter (has the function emit_effect)
+        if CURRENT_DRAW_MODE is DrawMode.BlobTrails:
+            emitter.emit_effect(BlobTrailEffect(self))
+        
+        # list of old points (Trail)
         self.oldPoints = []
         
         # used to keep track of blob being updated
@@ -98,10 +105,10 @@ class MovingBlob:
         if self.isActive():
             if self.drawmode is DrawMode.BlobPhatTrails:
                 draw_blob_phat_trails(self)
-            elif self.drawmode is DrawMode.BlobTrails:
-                draw_blob_trails(self)
-            else: 
-                draw_rotating_blobs(self)
+            #elif self.drawmode is DrawMode.BlobTrails:
+            #    draw_blob_trails(self)
+            #else: 
+            #    draw_rotating_blobs(self)
 
 
 
@@ -153,29 +160,50 @@ def draw_blob_phat_trails(blob):
         current_point_index = current_point_index - 1
         glPopMatrix()
         
-
-def draw_blob_trails(blob):
-
-    glLineWidth(2.0)
-    
-    glPushMatrix()
-    glColor3f(COLOUR_MAIN[0], COLOUR_MAIN[1], COLOUR_MAIN[2]) # Green/Yellow
-    
-    glBegin(GL_LINE_STRIP)
-    
-    # do current point
-    glVertex2f(blob.x, blob.y)
-    
-
-    for p in reversed(blob.oldPoints):
-        x = p[0]
-        y = p[1]
-        
-        glVertex2f(x, y)
         
         
-    glEnd()
-    glPopMatrix()
+        
+class BlobTrailEffect:
+
+
+    def __init__(self,blob):
+        self.blob = blob
+        self.points = []
+        self.finished = False
+        
+        
+    def update(self):
     
+        self.points.append( (self.blob.x, self.blob.y))
+        
+        # only hold the last AMT_OLD_POINTS points
+        while len(self.points) > AMT_OLD_POINTS :
+            self.points.pop(0)
+            
+            
+            
+    def draw(self):
+        glLineWidth(5.0)
     
+        glPushMatrix()
+        glColor3f(COLOUR_MAIN[0], COLOUR_MAIN[1], COLOUR_MAIN[2]) # Green/Yellow
+        
+        glBegin(GL_LINE_STRIP)
+        
+        for p in reversed(self.points):
+            x = p[0]
+            y = p[1]
+            
+            glVertex2f(x, y)
+            
+            
+        glEnd()
+        glPopMatrix()
+    
+
+def draw_bubbles(blob):
+    thing=None
+    
+
+
 
