@@ -11,7 +11,7 @@ import random
 from GLCircles import *
 
 # how many old points to keep track of
-AMT_OLD_POINTS = 80
+AMT_OLD_POINTS = 250
 
 COLOUR_MAIN = (0.388, 0.721, 1.0)
 
@@ -171,6 +171,10 @@ class BlobTrailEffect:
         self.points = []
         self.finished = False
         
+        # this tells the effect to dispose
+        # when this reaches zero
+        self.ttl = AMT_OLD_POINTS
+        
         
     def update(self):
     
@@ -179,14 +183,20 @@ class BlobTrailEffect:
         # only hold the last AMT_OLD_POINTS points
         while len(self.points) > AMT_OLD_POINTS :
             self.points.pop(0)
-            
-            
+        
+        # start killing the life of this effect    
+        if not self.blob.isActive():
+            self.ttl = self.ttl - 1
+        if self.ttl < 0:
+            self.finished = True
             
     def draw(self):
         glLineWidth(5.0)
+        
+        glTranslatef(0.0, 0.0, 0.01)
     
         glPushMatrix()
-        glColor3f(COLOUR_MAIN[0], COLOUR_MAIN[1], COLOUR_MAIN[2]) # Green/Yellow
+        glColor4f(COLOUR_MAIN[0], COLOUR_MAIN[1], COLOUR_MAIN[2], 0.35) # Green/Yellow
         
         glBegin(GL_LINE_STRIP)
         
