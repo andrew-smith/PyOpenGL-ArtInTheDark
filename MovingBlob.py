@@ -199,8 +199,6 @@ class BlobTrailEffect:
             
     def draw(self):
         glLineWidth(5.0)
-        
-        glTranslatef(0.0, 0.0, 0.01)
     
         glPushMatrix()
         glColor4f(self.colour[0], self.colour[1], self.colour[2], 0.35) 

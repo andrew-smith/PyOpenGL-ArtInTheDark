@@ -130,6 +130,7 @@ class BlobManager:
            
         glTranslatef(0.0, 0.0, 0.01)
         for effect in self.effects:
+            glTranslatef(0.0, 0.0, 0.001) # make effects appear on top of each other (for blending)
             effect.draw()
         
         
