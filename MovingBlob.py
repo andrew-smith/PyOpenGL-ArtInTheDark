@@ -13,6 +13,8 @@ from GLCircles import *
 # how many old points to keep track of
 AMT_OLD_POINTS = 80
 
+COLOUR_MAIN = (0.388, 0.721, 1.0)
+
 # class/enum to set drawing mode
 class DrawMode:
     RotatingBlobs=1 # circle with circles rotating around
@@ -157,7 +159,7 @@ def draw_blob_trails(blob):
     glLineWidth(2.0)
     
     glPushMatrix()
-    glColor3f(1.0, 1.0, 0.0) # Green/Yellow
+    glColor3f(COLOUR_MAIN[0], COLOUR_MAIN[1], COLOUR_MAIN[2]) # Green/Yellow
     
     glBegin(GL_LINE_STRIP)
     
@@ -174,5 +176,6 @@ def draw_blob_trails(blob):
         
     glEnd()
     glPopMatrix()
+    
     
 

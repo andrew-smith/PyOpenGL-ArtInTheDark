@@ -12,11 +12,6 @@ import random
 import math
 
 
-# helper function to remove blobs from lists who aren't updated
-
-
-
-
 # A manager class to manage all the blobs
 
 class BlobManager:
@@ -30,6 +25,7 @@ class BlobManager:
         
         
     def update(self):
+        global COLOUR_MAIN
         """
         Updates all the blobs.
         """
