@@ -69,9 +69,10 @@ class BlobManager:
                 lastBlobfound = None
                 for blob in self.blobs:
                     if lastBlobfound is None and blob.x > x - interaction_value and blob.x < x + interaction_value:
-                        lastBlobfound = blob
-                        blob.updateReferenceCount = blob.updateReferenceCount + 1
-                        blob.move(x,y)
+                        if blob.y > y - interaction_value and blob.y < y + interaction_value:
+                            lastBlobfound = blob
+                            blob.updateReferenceCount = blob.updateReferenceCount + 1
+                            blob.move(x,y)
                     
                 # if blob was not found then create a new one    
                 if lastBlobfound is None:
