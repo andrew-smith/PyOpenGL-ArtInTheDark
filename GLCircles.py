@@ -7,9 +7,12 @@ from OpenGL.GLU import *
 import math
 import sys
 
+
+# amount of degrees to step circles 
+CIRCLE_ANGLE_INC = 45
+
+
 # Methods for drawing circles in OpenGL
-
-
 def glDrawCircle(radius):
 
     glBegin(GL_TRIANGLE_FAN)
@@ -21,7 +24,7 @@ def glDrawCircle(radius):
     while True:
         rads = math.radians(angle)
         glVertex2f(math.cos(rads) * radius, math.sin(rads) * radius)
-        angle += 0.5 # smoothness of circle (increase for rough circles)
+        angle += CIRCLE_ANGLE_INC # smoothness of circle (increase for rough circles)
         if angle > 360:
             break
     
@@ -46,7 +49,7 @@ def glDrawTransparentCircle(radius, colourR, colourG, colourB):
     while True:
         rads = math.radians(angle)
         glVertex2f(math.cos(rads) * radius, math.sin(rads) * radius)
-        angle += 0.5 # smoothness of circle (increase for rough circles)
+        angle += CIRCLE_ANGLE_INC # smoothness of circle (increase for rough circles)
         if angle > 360:
             break
     
@@ -71,7 +74,7 @@ def glDrawInvertedTransparentCircle(radius, colourR, colourG, colourB, alpha):
     while True:
         rads = math.radians(angle)
         glVertex2f(math.cos(rads) * radius, math.sin(rads) * radius)
-        angle += 0.5 # smoothness of circle (increase for rough circles)
+        angle += CIRCLE_ANGLE_INC # smoothness of circle (increase for rough circles)
         if angle > 360:
             break
     
