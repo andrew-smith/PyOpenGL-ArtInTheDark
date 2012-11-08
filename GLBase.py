@@ -143,6 +143,7 @@ def DrawGLScene():
     glEnable(GL_TEXTURE_2D)
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
     glColor3f(1.0, 1.0, 1.0)
+    
     glBegin(GL_QUADS)
     glTexCoord2f(0.0, 0.0)
     glVertex2f(-3, 2.5) 
@@ -153,35 +154,13 @@ def DrawGLScene():
     glTexCoord2f(0.0, 1.0)
     glVertex2f(-3, -2.5) 
     glEnd()
+    
     glDisable(GL_TEXTURE_2D)
     
     
     glPushMatrix()
-    """
-    for p in client.points:
-        
-        x = ((p[0] / 640.0) * 6. glTexImage2D(GL_TEXTURE_2D, 
-    0, 
-    GL_RGB, 
-    image_size[0], 
-    image_size[1], 
-    0,
-    GL_RGB, 
-    GL_UNSIGNED_BYTE, 
-    image_arr)0) - 3.0
-        y = (((480.0 - p[1]) / 480.0) * 6.0) - 3.0
-    
-        glPushMatrix()
-        glTranslatef(x, y, 0)
-        glDrawCircle(0.1)
-        glPopMatrix()
-        
-    """
-    
-    
     blobManager.update()
     blobManager.draw()
-    
     glPopMatrix()
     
  
