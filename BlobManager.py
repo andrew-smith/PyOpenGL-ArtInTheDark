@@ -59,18 +59,22 @@ class BlobManager:
         
         if self.client.hasNewData:
         
+            
+            bgImg = self.cvApp.display_image
+        
+            
             glEnable(GL_TEXTURE_2D)
             glTexImage2D(GL_TEXTURE_2D, 
                 0, 
                 GL_RGB, 
-                640, 
-                480, 
+                self.cvApp.display_image_width, 
+                self.cvApp.display_image_height, 
                 0,
                 GL_RGB, 
                 GL_UNSIGNED_BYTE, 
                 self.cvApp.display_image)
             glDisable(GL_TEXTURE_2D)
-        
+            
             # alert blobs that a new update is coming
             for blob in self.blobs:
                 blob.updateReferenceCount = 0
