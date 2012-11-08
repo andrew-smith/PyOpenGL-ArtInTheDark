@@ -62,7 +62,7 @@ ESCAPE = '\033'
 window = 0
 
 
-REVERSE_DISPLAY = False
+REVERSE_DISPLAY = True
 
 # array of blobs to test with
 blobManager = BlobManager()
@@ -70,6 +70,7 @@ blobManager = BlobManager()
 # OpenCV application
 cvApp = Target()
 blobManager.cvApp = cvApp
+blobManager.reverseDisplay = REVERSE_DISPLAY
 
 # command line arguments configuration
 parser = OptionParser()
@@ -126,20 +127,8 @@ def DrawGLScene():
     if REVERSE_DISPLAY:
         glRotatef(180, 0.0, 1.0, 0.0)
     
-    """
-    if cvApp.display_image is not None:
-        glTexImage2D(GL_TEXTURE_2D, 
-            0, 
-            GL_RGB, 
-            640, 
-            480, 
-            0,
-            GL_RGB, 
-            GL_UNSIGNED_BYTE, 
-            cvApp.display_image)
-    
-    """
     # draw background img
+    
     glEnable(GL_TEXTURE_2D)
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
     
