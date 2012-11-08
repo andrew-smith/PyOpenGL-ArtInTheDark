@@ -142,17 +142,18 @@ def DrawGLScene():
     # draw background img
     glEnable(GL_TEXTURE_2D)
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
-    glColor3f(1.0, 1.0, 1.0)
+    
+    glColor4f(1.0, 1.0, 1.0, 0.3)
     
     glBegin(GL_QUADS)
     glTexCoord2f(0.0, 0.0)
-    glVertex2f(-3, 2.5) 
+    glVertex2f(-3.2, 3) 
     glTexCoord2f(1.0, 0.0)
-    glVertex2f(3, 2.5)
+    glVertex2f(3.2, 3)
     glTexCoord2f(1.0, 1.0)
-    glVertex2f(3, -2.5) 
+    glVertex2f(3.2, -3) 
     glTexCoord2f(0.0, 1.0)
-    glVertex2f(-3, -2.5) 
+    glVertex2f(-3.2, -3) 
     glEnd()
     
     glDisable(GL_TEXTURE_2D)
