@@ -13,7 +13,7 @@ import math
 
 
 # limit amount of effects there can be
-MAX_EFFECTS_COUNT = 300
+MAX_EFFECTS_COUNT = 150
 
 
 # A manager class to manage all the blobs
@@ -29,6 +29,8 @@ class BlobManager:
         # list of effects that aren't attached to blobs 
         self.effects = []
         self.cvApp = None
+        
+        self.reverseDisplay = False
         
         
         
@@ -141,14 +143,19 @@ class BlobManager:
         """
         Draws all the blobs
         """
-        glTranslatef(0.0, 0.0, 0.01)
+        
+        move_value = 0.001
+        if self.reverseDisplay:
+            move_value = -0.001
+        
+        glTranslatef(0.0, 0.0, move_value)
         
         for blob in self.blobs:
             blob.draw()
            
-        glTranslatef(0.0, 0.0, 0.01)
+        glTranslatef(0.0, 0.0, move_value)
         for effect in self.effects:
-            glTranslatef(0.0, 0.0, 0.001) # make effects appear on top of each other (for blending)
+            glTranslatef(0.0, 0.0, move_value) # make effects appear on top of each other (for blending)
             effect.draw()
         
         
