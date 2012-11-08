@@ -11,7 +11,7 @@ import random
 from GLCircles import *
 
 # how many old points to keep track of
-AMT_OLD_POINTS = 250
+AMT_OLD_POINTS = 125
 
 COLOUR_MAIN = (0.388, 0.721, 1.0)
 
@@ -201,7 +201,7 @@ class BlobTrailEffect:
         glLineWidth(5.0)
     
         glPushMatrix()
-        glColor4f(self.colour[0], self.colour[1], self.colour[2], 0.35) 
+        glColor4f(self.colour[0], self.colour[1], self.colour[2], 0.7) 
         
         glBegin(GL_LINE_STRIP)
         
