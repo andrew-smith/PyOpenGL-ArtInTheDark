@@ -71,15 +71,18 @@ class ClientConnection:
         
         
         while True:
-            data = conn.recv(1024)
-            data = data.strip()
-            
-            if len(data) > 1:
-                self.points = pickle.loads(data)
-                self.hasNewData = True
+            try:
+                data = conn.recv(1024)
+                data = data.strip()
                 
-                if DEBUG:
-                    print self.points
+                if len(data) > 1:
+                    self.points = pickle.loads(data)
+                    self.hasNewData = True
+                    
+                    if DEBUG:
+                        print self.points
+            except socket.error as (errno, msg):
+                print "error: " + str(msg)
                 
         conn.close()
 
