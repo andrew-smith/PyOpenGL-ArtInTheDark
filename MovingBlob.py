@@ -33,6 +33,31 @@ def ensurePositiveNum(value):
     return value
 
 
+def randomBrightColour():
+
+    # generate high random float value
+    r = randomHighFloatValue()
+    g = randomHighFloatValue()
+    b = randomHighFloatValue()
+    
+    colour = [r,g,b]
+
+    # pick either r,g,b to be zero
+    randZero = random.randint(0,2)
+    colour[randZero] = 0
+    
+    return colour
+
+# helper method for the randomBrightColour
+def randomHighFloatValue():
+    # get a random number between 0 and 55
+    randNum = random.random() * 55.0
+    # move it to 200 to 255
+    randNum += 200
+    # move it to 0.0 to 1.0
+    return randNum/255.0
+
+
 # Defines a moving blob in a 2D world
 
 class MovingBlob:
@@ -176,7 +201,7 @@ class BlobTrailEffect:
         self.blob = blob
         self.points = []
         self.finished = False
-        self.colour = (random.random(), random.random(), random.random())
+        self.colour = randomBrightColour()
         
         # this tells the effect to dispose
         # when this reaches zero
