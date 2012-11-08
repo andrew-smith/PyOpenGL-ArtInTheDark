@@ -24,7 +24,7 @@ class DrawMode:
   
     
 
-CURRENT_DRAW_MODE = DrawMode.BlobTrails
+CURRENT_DRAW_MODE = DrawMode.BubblesBubblesBubbles
 
 # helper function to reverse negative numbers
 def ensurePositiveNum(value):
@@ -246,7 +246,14 @@ class BlobTrailEffect:
 def handle_bubbles(blob):
     blob.emitter.emit_effect(BubbleParticleEffect(blob.x,blob.y))
     
+    
+# set to true to darken the colour every update
+REDUCE_COLOUR = False
 
+def reduceColour(array, index):
+    array[index] -= 0.05
+    if array[index] < 0:
+        array[index] = 0
 
 class BubbleParticleEffect:
     
@@ -254,17 +261,29 @@ class BubbleParticleEffect:
     
         self.x = x
         self.y = y
-        self.gravity = -0.1
-        self.alpha = 1.0
+        self.vectorX = (random.random() * 0.15) - 0.075
+        self.vectorY = (random.random() * 0.3) - 0.15
         self.finished = False
+        self.colour = randomBrightColour()
         self.ttl = 25
         
     
     
     
     def update(self):
-        self.alpha = self.alpha - 0.02
-        self.y = self.y + self.gravity
+    
+        # darken colour for every update
+        if REDUCE_COLOUR:
+            reduceColour(self.colour, 0)
+            reduceColour(self.colour, 1)
+            reduceColour(self.colour, 2)
+        
+        # move blob based on vec
+        self.x += self.vectorX
+        self.y += self.vectorY
+        
+        # apply gravity
+        self.vectorY -= 0.025
         
         self.ttl -= 1
         
@@ -278,7 +297,7 @@ class BubbleParticleEffect:
         
         glTranslatef(self.x, self.y, 0.0)
         
-        glColor4f(COLOUR_MAIN[0], COLOUR_MAIN[1], COLOUR_MAIN[2], self.alpha)
+        glColor3f(self.colour[0], self.colour[1], self.colour[2])
         glDrawCircle(0.05)
         
         glPopMatrix()
