@@ -11,6 +11,10 @@ __author__ = 'Tarn Weisner Burton <twburton@users.sourceforge.net>'
 
 from BlobManager import *
 
+import sys
+print "Make sure /home/andrew/repos/AITD exists"
+sys.path.insert(0, '/home/andrew/repos/AITD')
+from MotionTracker import Target
  
 #
 # Ported to PyOpenGL 2.0 by Tarn Weisner Burton 10May2001
@@ -63,6 +67,9 @@ REVERSE_DISPLAY = False
 # array of blobs to test with
 blobManager = BlobManager()
 
+# OpenCV application
+cvApp = Target()
+blobManager.cvApp = cvApp
 
 # command line arguments configuration
 parser = OptionParser()
@@ -119,12 +126,49 @@ def DrawGLScene():
     if REVERSE_DISPLAY:
         glRotatef(180, 0.0, 1.0, 0.0)
     
+    """
+    if cvApp.display_image is not None:
+        glTexImage2D(GL_TEXTURE_2D, 
+            0, 
+            GL_RGB, 
+            640, 
+            480, 
+            0,
+            GL_RGB, 
+            GL_UNSIGNED_BYTE, 
+            cvApp.display_image)
+    
+    """
+    # draw background img
+    glEnable(GL_TEXTURE_2D)
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
+    glColor3f(1.0, 1.0, 1.0)
+    glBegin(GL_QUADS)
+    glTexCoord2f(0.0, 0.0)
+    glVertex2f(-3, 2.5) 
+    glTexCoord2f(1.0, 0.0)
+    glVertex2f(3, 2.5)
+    glTexCoord2f(1.0, 1.0)
+    glVertex2f(3, -2.5) 
+    glTexCoord2f(0.0, 1.0)
+    glVertex2f(-3, -2.5) 
+    glEnd()
+    glDisable(GL_TEXTURE_2D)
+    
     
     glPushMatrix()
     """
     for p in client.points:
         
-        x = ((p[0] / 640.0) * 6.0) - 3.0
+        x = ((p[0] / 640.0) * 6. glTexImage2D(GL_TEXTURE_2D, 
+    0, 
+    GL_RGB, 
+    image_size[0], 
+    image_size[1], 
+    0,
+    GL_RGB, 
+    GL_UNSIGNED_BYTE, 
+    image_arr)0) - 3.0
         y = (((480.0 - p[1]) / 480.0) * 6.0) - 3.0
     
         glPushMatrix()
@@ -133,6 +177,7 @@ def DrawGLScene():
         glPopMatrix()
         
     """
+    
     
     blobManager.update()
     blobManager.draw()
@@ -193,6 +238,9 @@ def main():
  
     # Initialize our window. 
     InitGL(640, 480)
+    
+    # start CV
+    start_new_thread(cvApp.run, ())
  
     # Start Event Processing Engine    
     glutMainLoop()

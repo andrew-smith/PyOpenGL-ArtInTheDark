@@ -28,6 +28,7 @@ class BlobManager:
         
         # list of effects that aren't attached to blobs 
         self.effects = []
+        self.cvApp = None
         
         
         
@@ -57,6 +58,19 @@ class BlobManager:
         interaction_value = 0.25
         
         if self.client.hasNewData:
+        
+            glEnable(GL_TEXTURE_2D)
+            glTexImage2D(GL_TEXTURE_2D, 
+                0, 
+                GL_RGB, 
+                640, 
+                480, 
+                0,
+                GL_RGB, 
+                GL_UNSIGNED_BYTE, 
+                self.cvApp.display_image)
+            glDisable(GL_TEXTURE_2D)
+        
             # alert blobs that a new update is coming
             for blob in self.blobs:
                 blob.updateReferenceCount = 0
