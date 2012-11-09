@@ -114,6 +114,7 @@ class BlobManager:
             for blob in blobsToRemove:
                 blob.dispose()
                 self.blobs.remove(blob)
+                del blob
             
             # update all blobs
             for blob in self.blobs:
@@ -131,11 +132,12 @@ class BlobManager:
             # remove all finished effects
             for effect in effectsToRemove:
                 self.effects.remove(effect)
+                del effect
                 
             # limit on how many effects are displayed
             while len(self.effects) > MAX_EFFECTS_COUNT:
-                self.effects.pop(0)
-            
+                effect = self.effects.pop(0)
+                del effect
     
     
     

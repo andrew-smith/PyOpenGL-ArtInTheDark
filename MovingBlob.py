@@ -24,7 +24,7 @@ class DrawMode:
   
     
 
-CURRENT_DRAW_MODE = DrawMode.BubblesBubblesBubbles
+CURRENT_DRAW_MODE = DrawMode.BlobTrails
 
 # helper function to reverse negative numbers
 def ensurePositiveNum(value):
@@ -56,6 +56,10 @@ def randomHighFloatValue():
     randNum += 200
     # move it to 0.0 to 1.0
     return randNum/255.0
+
+
+# 0.03 = 3% chance of bubble popping off
+RAND_BUBBLE_RATE = 0.1 # number between 0 and 1 to randomly generate a bubble
 
 
 # Defines a moving blob in a 2D world
@@ -109,6 +113,10 @@ class MovingBlob:
         # set new position
         self.x = x
         self.y = y
+        
+        # randomly display a bubble popping off
+        if random.random() < RAND_BUBBLE_RATE:
+            self.emitter.emit_effect(BubbleParticleEffect(x,y))
         
         
     
@@ -191,7 +199,7 @@ def draw_blob_phat_trails(blob):
         glPopMatrix()
         
         
-        
+    
 # thin trailing line that folows blobs
 # 3D enabled and alpha transparency so that lines overlap each other and get brighter
 class BlobTrailEffect:
@@ -215,7 +223,7 @@ class BlobTrailEffect:
         # only hold the last AMT_OLD_POINTS points
         while len(self.points) > AMT_OLD_POINTS :
             self.points.pop(0)
-        
+            
         # start killing the life of this effect    
         if not self.blob.isActive():
             self.ttl = self.ttl - 1
@@ -271,57 +279,35 @@ class BubbleParticleEffect:
     
     
     def update(self):
-    
-        # darken colour for every update
-        if REDUCE_COLOUR:
-            reduceColour(self.colour, 0)
-            reduceColour(self.colour, 1)
-            reduceColour(self.colour, 2)
-        
-        # move blob based on vec
-        self.x += self.vectorX
-        self.y += self.vectorY
-        
-        # apply gravity
-        self.vectorY -= 0.025
-        
-        self.ttl -= 1
-        
-        if self.y < -10 or self.ttl < 1:
-            self.finished = True
+        if not self.finished:
+            # darken colour for every update
+            if REDUCE_COLOUR:
+                reduceColour(self.colour, 0)
+                reduceColour(self.colour, 1)
+                reduceColour(self.colour, 2)
+            
+            # move blob based on vec
+            self.x += self.vectorX
+            self.y += self.vectorY
+            
+            # apply gravity
+            self.vectorY -= 0.025
+            
+            self.ttl -= 1
+            
+            if self.y < -10 or self.ttl < 1:
+                self.finished = True
         
         
         
     def draw(self):
-        glPushMatrix()
-        
-        glTranslatef(self.x, self.y, 0.0)
-        
-        glColor3f(self.colour[0], self.colour[1], self.colour[2])
-        glDrawCircle(0.05)
-        
-        glPopMatrix()
+        if not self.finished:
+            glPushMatrix()
+            
+            glTranslatef(self.x, self.y, 0.0)
+            
+            glColor3f(self.colour[0], self.colour[1], self.colour[2])
+            glDrawCircle(0.05)
+            
+            glPopMatrix()
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-
-
