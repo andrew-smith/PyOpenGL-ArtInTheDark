@@ -199,6 +199,8 @@ def draw_blob_phat_trails(blob):
         glPopMatrix()
         
         
+        
+TRAILING_LINE_TRANSPARENCY = 0.7
     
 # thin trailing line that folows blobs
 # 3D enabled and alpha transparency so that lines overlap each other and get brighter
@@ -218,11 +220,15 @@ class BlobTrailEffect:
         
     def update(self):
     
-        self.points.append( (self.blob.x, self.blob.y))
+        self.points.append( [self.blob.x, self.blob.y])
         
         # only hold the last AMT_OLD_POINTS points
         while len(self.points) > AMT_OLD_POINTS :
-            self.points.pop(0)
+            p1 = self.points.pop(0)
+            p2 = self.points.pop(0)
+            
+            if p1 is not None and p2 is not None:
+                self.blob.emitter.emit_effect(DroppingLine(p1,p2,self.colour))
             
         # start killing the life of this effect    
         if not self.blob.isActive():
@@ -234,7 +240,7 @@ class BlobTrailEffect:
         glLineWidth(5.0)
     
         glPushMatrix()
-        glColor4f(self.colour[0], self.colour[1], self.colour[2], 0.7) 
+        glColor4f(self.colour[0], self.colour[1], self.colour[2], TRAILING_LINE_TRANSPARENCY) 
         
         glBegin(GL_LINE_STRIP)
         
@@ -310,4 +316,35 @@ class BubbleParticleEffect:
             glDrawCircle(0.05)
             
             glPopMatrix()
+    
+    
+    
+LINE_DROP_RATE = 0.15    
+
+# a line that drops off a blob trail
+class DroppingLine:
+
+    def __init__(self, p1, p2, colour):
+        self.p1 = p1
+        self.p2 = p2
+        self.colour = colour
+        self.ttl = 25
+        self.finished = False
+        
+        
+        
+    def update(self):
+        self.p1[1] -= LINE_DROP_RATE
+        self.p2[1] -= LINE_DROP_RATE
+    
+        self.ttl -= 1
+        if self.ttl < 0:
+            self.finished = True
+    
+    def draw(self):
+        glColor4f(self.colour[0], self.colour[1], self.colour[2], TRAILING_LINE_TRANSPARENCY) 
+        glBegin(GL_LINE_STRIP)
+        glVertex2f(self.p1[0], self.p1[1])
+        glVertex2f(self.p2[0], self.p2[1])
+        glEnd()
     
