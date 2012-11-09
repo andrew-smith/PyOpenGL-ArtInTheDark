@@ -269,6 +269,9 @@ def reduceColour(array, index):
     if array[index] < 0:
         array[index] = 0
 
+
+CIRCLE_RADIUS = 0.025
+
 class BubbleParticleEffect:
     
     def __init__(self,x,y):
@@ -313,7 +316,7 @@ class BubbleParticleEffect:
             glTranslatef(self.x, self.y, 0.0)
             
             glColor3f(self.colour[0], self.colour[1], self.colour[2])
-            glDrawCircle(0.05)
+            glDrawCircle(CIRCLE_RADIUS)
             
             glPopMatrix()
     
