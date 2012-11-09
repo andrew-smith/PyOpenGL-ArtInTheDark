@@ -111,6 +111,12 @@ class BlobManager:
             for blob in self.blobs:
                 if blob.updateReferenceCount is 0:
                     blobsToRemove.append(blob)
+                if blob.updateReferenceCount > 1: # then a collision of blobs happened
+                    self.effects.append(BubbleParticleEffect(blob.x, blob.y))
+                    self.effects.append(BubbleParticleEffect(blob.x, blob.y))
+                    self.effects.append(BubbleParticleEffect(blob.x, blob.y))
+                    self.effects.append(BubbleParticleEffect(blob.x, blob.y))
+                    
             for blob in blobsToRemove:
                 blob.dispose()
                 self.blobs.remove(blob)
